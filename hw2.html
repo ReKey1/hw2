@@ -1,0 +1,85 @@
+
+<!-- saved from url=(0058)https://web.sfc.keio.ac.jp/~slash/ABC/sensors/1_accel.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+    <script type="text/javascript" src="./1_accel_files/jquery.min.js.download"></script>
+  </head>
+
+  <body data-new-gr-c-s-check-loaded="14.1201.0" data-gr-ext-installed="">
+
+    <h1>Data from accelerometer</h1>
+      <button onclick="requestMotionPermission();">Get permission and start sensing</button>
+      <button onclick="stopDeviceMotion();">Stop</button>
+
+      <p> time: <span id="time">null</span></p>
+      <h2>Acceleration</h2>
+        <p> X: <span id="accel-x">null</span> </p> 
+        <p> Y: <span id="accel-y">null</span> </p> 
+        <p> Z: <span id="accel-z">null</span> </p> 
+      <h2>Rotation</h2>
+        <p>Alpha: <span id="rotation-a">null</span> </p>
+        <p>Beta: <span id="rotation-b">null</span> </p>
+        <p>Gamma: <span id="rotation-g">null</span> </p>
+
+  
+
+
+
+<script type="text/javascript">
+alert("Welcome to sample page 1!");
+
+//////////////////////////////////////////////////////
+//Function to get sensor access permission from the browser
+//////////////////////////////////////////////////////
+function requestMotionPermission(){
+  if ( DeviceMotionEvent &&
+       typeof DeviceMotionEvent.requestPermission === 'function' ){
+      // iOS 13+ の Safari
+      // 許可を取�&#65533;
+      DeviceMotionEvent.requestPermission().then(permissionState => {
+	  if (permissionState === 'granted') {
+              // 許可を得られた場合、devicemotionをイベントリスナ�&#65533;に追�&#65533;
+	      window.addEventListener("devicemotion", handleMovement, false);
+	  } else {
+              // 許可を得られなかった�&#65533;�合�&#65533;処�&#65533;
+	      console.log("Perrmission not granted!");
+	      alert("Perrmission not granted!");
+	  }
+      }).catch(console.error) // https通信でな�&#65533;&#65533;�合などで許可を取得できなかった�&#65533;��&#65533;
+
+  } else {
+      //For other devices
+      console.log("detected other device. so adding listener...");
+      window.addEventListener("devicemotion", handleMovement, false);
+  }
+
+}
+
+function stopDeviceMotion(){ 
+    window.removeEventListener("devicemotion", handleMovement, false);
+}
+
+////////////////////////////////////////////////////////////////////
+//Function(1): to handle acceleration data
+//  - This function will be called about 10-50 times per second
+////////////////////////////////////////////////////////////////////
+function trackTime() {
+    document.getElementById("time").innerHTML = event.timeStamp;
+}
+function handleMovement(ev){
+
+    //alert("" + event.acceleration.x + " " + event.acceleration.y + " " + event.acceleration.z);
+    trackTime();
+    $('#accel-x').text( ev.acceleration.x );
+    $('#accel-y').text( ev.acceleration.y );
+    $('#accel-z').text( ev.acceleration.z );
+    $('#rotation-a').text( ev.rotationRate.alpha );
+    $('#rotation-b').text( ev.rotationRate.beta );
+    $('#rotation-g').text( ev.rotationRate.gamma );
+}
+
+</script>
+<!--  ===========================================  -->
+
+
+
+</body><!--  ===========================================  -->
